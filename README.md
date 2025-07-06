@@ -194,4 +194,3 @@ adopter_percentage AS (
         ROUND(COUNT(CASE WHEN non_adopted IS NOT NULL THEN 1 END) * 100.0 / COUNT(eligible_users), 2) AS non_adopters_count
     FROM all_users
 )
-'''
