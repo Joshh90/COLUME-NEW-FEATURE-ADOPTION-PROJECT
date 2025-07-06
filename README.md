@@ -8,7 +8,9 @@
 5. [Data Sources](#data-sources)
 6. [Data Cleaning Summary](#data-cleaning-summary)
 7. [Analysis Pipeline](#analysis-pipeline)
-8. [SQL: Early Adoption Analysis Pipeline](#sql-early-adoption-analysis-pipeline)
+8. [Query Highlights](#query-highlights)
+9. [Key Metrics](#key-metrics)
+10. [SQL: Early Adoption Analysis Pipeline](#sql-early-adoption-analysis-pipeline)
 
 ---
 
@@ -32,7 +34,7 @@ This analysis investigates how early adoption of these features impacted user re
 
 > **Did early engagement with the newly launched features improve user retention?**
 
-To answer this, we compared users who adopted **at least one feature** within the first **7 days** of launch against those who did not.
+We compared users who adopted **at least one feature** within the first **7 days** of launch against those who did not.
 
 ---
 
@@ -52,30 +54,30 @@ To answer this, we compared users who adopted **at least one feature** within th
 
 ## Data Sources
 
-- `users`: The user profile and metadata  
-- `activity_log`: User activities and feature usage  
+- `users`: User profile and metadata  
+- `activity_log`: Feature usage logs  
 - `sessions`: Login/logout data  
-- `billing`: Payment history  
-- `features`: Feature catalog  
+- `billing`: Payment records  
+- `features`: Feature definitions  
 - `subscriptions`: Subscription lifecycle  
-- `support_tickets`: Customer issues  
-- `feedback`: User feedback submissions  
+- `support_tickets`: User-reported issues  
+- `feedback`: Customer feedback  
 
 ---
 
 ## Data Cleaning Summary
 
 ### Integrity Checks:
-- Checked for `NULLs`, duplicates, outliers  
+- Checked for `NULL`s, duplicates, outliers  
 - Verified foreign key relationships  
 
 ### Cleaning Actions:
 - Dropped users aged **<16** or **>90**  
 - Split `full_name` into `first_name` and `last_name`  
-- Standardized `plan_type` and `currency` values  
-- Fixed `churn_date` earlier than `sign_up_date`  
-- Renamed and deduplicated key tables  
-- Handled invalid `amount` and payment records  
+- Standardized `plan_type`, `currency`  
+- Fixed invalid `churn_date < sign_up_date`  
+- Renamed and deduplicated tables  
+- Handled negative or missing payment amounts  
 
 ---
 
@@ -86,11 +88,34 @@ To answer this, we compared users who adopted **at least one feature** within th
    - Signed up *before* launch  
    - Didn’t churn *on or before* launch  
 3. **Segment Adopters**
-   - Used at least one feature *within 7 days* → **adopter**  
+   - Used any new feature *within 7 days* → **adopter**  
    - Otherwise → **non-adopter**  
 4. **Calculate Weekly Retention**
-   - Use `ROW_NUMBER()` and weekly buckets (`week_diff`) from **-2 to +6**
-   - Formula: `Retention % = active / cohort size`
+   - Use `ROW_NUMBER()` + weekly buckets from **-2 to +6**
+   - `Retention % = active / cohort size`
+
+---
+
+## Query Highlights
+
+- ✅ **CTEs and window functions** used for modular and efficient logic  
+- ⚡ **Indexed**: `user_id`, `timestamp` for faster joins and filters  
+- 🚫 Avoided correlated subqueries  
+- 🧠 Used `EXPLAIN` to verify query plans and performance  
+
+---
+
+## Key Metrics
+
+📈 **Adoption Summary**
+- **7-Day Adoption Rate**: `45.41%`  
+- **Adopters**: `2,837`  
+- **Non-Adopters**: `3,411`  
+
+📊 **Feature Usage Breakdown**
+- Custom Themes: `35.13%`  
+- Voice Assistant: `33.23%`  
+- Task Reminders: `31.65%`  
 
 ---
 
@@ -102,10 +127,47 @@ CREATE VIEW retention_rate AS
 WITH
 
 -- Step 1a: Get all users eligible for feature adoption
--- Criteria: signed up before launch and not churned before launch
 eligible_users AS (
     SELECT user_id 
     FROM users
     WHERE sign_up_date < '2025-02-20' 
       AND (churn_date > '2025-02-20' OR churn_date IS NULL)
 ),
+
+-- Step 1b: Identify users who adopted any of the new features within 7 days post-launch
+adopters AS (
+    SELECT DISTINCT user_id 
+    FROM activity_log
+    WHERE activity_type IN ('task_reminder', 'voice_assistant', 'custom_theme')
+      AND timestamp BETWEEN '2025-02-20' AND '2025-02-20'::DATE + INTERVAL '7 days'
+      AND user_id IN (SELECT user_id FROM eligible_users)
+),
+
+-- Step 1c: Identify eligible users who did NOT adopt any new feature
+non_adopters AS (
+    SELECT eu.user_id AS user_id 
+    FROM eligible_users eu 
+    LEFT JOIN adopters a ON eu.user_id = a.user_id
+    WHERE a.user_id IS NULL
+),
+
+-- Step 1d: Combine all eligible users with their adoption status
+all_users AS (
+    SELECT 
+        eu.user_id AS eligible_users, 
+        a.user_id AS adopted, 
+        na.user_id AS non_adopted
+    FROM eligible_users eu 
+    LEFT JOIN adopters a ON eu.user_id = a.user_id
+    LEFT JOIN non_adopters na ON na.user_id = eu.user_id
+),
+
+-- Step 1e: Calculate percentage of adopters vs non-adopters
+adopter_percentage AS (
+    SELECT 
+        ROUND(COUNT(CASE WHEN adopted IS NOT NULL THEN 1 END) * 100.0 / COUNT(eligible_users), 2) AS adopters_count,
+        ROUND(COUNT(CASE WHEN non_adopted IS NOT NULL THEN 1 END) * 100.0 / COUNT(eligible_users), 2) AS non_adopters_count
+    FROM all_users
+)
+
+-- You can SELECT * FROM adopter_percentage or continue pipeline
