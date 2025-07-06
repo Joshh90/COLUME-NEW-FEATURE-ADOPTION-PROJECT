@@ -98,21 +98,22 @@ We compared users who adopted **at least one feature** within the first **7 days
 
 ## Query Highlights
 
-- ✅ **CTEs and window functions** used for modular and efficient logic  
-- ⚡ **Indexed**: `user_id`, `timestamp` for faster joins and filters  
-- 🚫 Avoided correlated subqueries  
-- 🧠 Used `EXPLAIN` to verify query plans and performance  
+⚙️ **Query Optimization Techniques**
+- ✅ Used **CTEs** and **window functions** for clarity and modularity  
+- ⚡ Indexed `user_id`, `timestamp` to improve filter and join performance  
+- ❌ Avoided **correlated subqueries** to prevent repeated execution costs  
+- 🧠 Ran `EXPLAIN` to verify and tune query plan efficiency  
 
 ---
 
 ## Key Metrics
 
-📈 **Adoption Summary**
+📊 **Adoption Summary**
 - **7-Day Adoption Rate**: `45.41%`  
 - **Adopters**: `2,837`  
 - **Non-Adopters**: `3,411`  
 
-📊 **Feature Usage Breakdown**
+📌 **Feature Usage Breakdown**
 - Custom Themes: `35.13%`  
 - Voice Assistant: `33.23%`  
 - Task Reminders: `31.65%`  
