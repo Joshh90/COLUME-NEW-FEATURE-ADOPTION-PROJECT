@@ -1,18 +1,18 @@
-# COLUME-NEW-FEATURE-ADOPTION-PROJECT
 # 📊 Feature Adoption & Retention Analysis
 
 ## 📚 Table of Contents
-1. [Project Overview](#1-project-overview)
-2. [Business Question](#2-business-question)
-3. [Objectives](#3-objectives)
-4. [Stakeholders](#4-stakeholders)
-5. [Data Sources](#5-data-sources)
-6. [Data Cleaning Summary](#6-data-cleaning-summary)
-7. [Analysis Pipeline](#7-analysis-pipeline)
+1. [Project Overview](#project-overview)
+2. [Business Question](#business-question)
+3. [Objectives](#objectives)
+4. [Stakeholders](#stakeholders)
+5. [Data Sources](#data-sources)
+6. [Data Cleaning Summary](#data-cleaning-summary)
+7. [Analysis Pipeline](#analysis-pipeline)
+8. [SQL: Early Adoption Analysis Pipeline](#sql-early-adoption-analysis-pipeline)
 
 ---
 
-## 🔍 1. Project Overview
+## Project Overview
 
 **Brief Details**  
 Project Duration: **February – April 2025**  
@@ -20,15 +20,15 @@ Prepared by: **Analytics Team**
 Primary Stakeholder: **Product Team**
 
 In February 2025, Colume launched three new features:
-- 🎨 Custom Themes  
-- 🗣️ Voice Assistant  
-- ⏰ Task Reminders
+- Custom Themes  
+- Voice Assistant  
+- Task Reminders
 
 This analysis investigates how early adoption of these features impacted user retention and behavior trends post-launch.
 
 ---
 
-## ❓ 2. Business Question
+## Business Question
 
 > **Did early engagement with the newly launched features improve user retention?**
 
@@ -36,7 +36,7 @@ To answer this, we compared users who adopted **at least one feature** within th
 
 ---
 
-## 🎯 3. Objectives
+## Objectives
 
 - Segment users into **early adopters** and **non-adopters**  
 - Calculate **7-day adoption rate**  
@@ -44,13 +44,13 @@ To answer this, we compared users who adopted **at least one feature** within th
 
 ---
 
-## 👥 4. Stakeholders
+## Stakeholders
 
 - **Primary:** Product Team  
 
 ---
 
-## 🗃️ 5. Data Sources
+## Data Sources
 
 - `users`: The user profile and metadata  
 - `activity_log`: User activities and feature usage  
@@ -63,13 +63,13 @@ To answer this, we compared users who adopted **at least one feature** within th
 
 ---
 
-## 🧹 6. Data Cleaning Summary
+## Data Cleaning Summary
 
-### ✅ Integrity Checks:
+### Integrity Checks:
 - Checked for `NULLs`, duplicates, outliers  
 - Verified foreign key relationships  
 
-### 🧼 Cleaning Actions:
+### Cleaning Actions:
 - Dropped users aged **<16** or **>90**  
 - Split `full_name` into `first_name` and `last_name`  
 - Standardized `plan_type` and `currency` values  
@@ -79,7 +79,7 @@ To answer this, we compared users who adopted **at least one feature** within th
 
 ---
 
-## 🔄 7. Analysis Pipeline
+## Analysis Pipeline
 
 1. **Validate Launch Date** → February 20, 2025  
 2. **Filter Eligible Users**
@@ -94,7 +94,7 @@ To answer this, we compared users who adopted **at least one feature** within th
 
 ---
 
-## 🛠️ SQL: Early Adoption Analysis Pipeline
+## SQL: Early Adoption Analysis Pipeline
 
 ```sql
 -- STEP 1: Create view to store retention analysis
@@ -109,4 +109,3 @@ eligible_users AS (
     WHERE sign_up_date < '2025-02-20' 
       AND (churn_date > '2025-02-20' OR churn_date IS NULL)
 ),
-...
