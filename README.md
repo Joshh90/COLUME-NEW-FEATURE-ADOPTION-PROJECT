@@ -116,9 +116,33 @@ We compared users who adopted **at least one feature** within the first **7 days
 📌 **Feature Usage Breakdown**
 - Custom Themes: `35.13%`  
 - Voice Assistant: `33.23%`  
-- Task Reminders: `31.65%`  
+- Task Reminders: `31.65%`
+
+  ### Weekly Retention Rate
+
+| Week | Adopters (%) | Non-Adopters (%) | Difference |
+|------|---------------|------------------|------------|
+| -2   | 30.60         | 12.25            | +18.35     |
+| -1   | 81.11         | 55.78            | +25.33     |
+|  0   | 100.00        | 74.24            | +25.76     |
+|  1   | 85.83         | 59.35            | +26.48     |
+|  2   | 84.95         | 59.43            | +25.52     |
+|  3   | 85.41         | 59.61            | +25.80     |
+|  4   | 84.28         | 59.35            | +24.93     |
+|  5   | 84.95         | 57.87            | +27.08     |
+|  6   | 83.89         | 57.96            | +25.93     |
 
 ---
+## 🧠 10. BAIIR Framework
+
+| **Stage**         | **Action Taken**                                              |
+|-------------------|---------------------------------------------------------------|
+| **Baseline**      | Defined eligible users and grouped by adoption                |
+| **Analysis**      | Retention, churn, session time, upgrade trends                |
+| **Insight**       | Adoption improves retention and engagement                    |
+| **Impact**        | Boosting adoption improves retention, revenue                 |
+| **Recommendation**| Build nudges, reinforce value, reduce drop-off                |
+
 
 ## SQL: Early Adoption Analysis Pipeline
 
@@ -170,5 +194,4 @@ adopter_percentage AS (
         ROUND(COUNT(CASE WHEN non_adopted IS NOT NULL THEN 1 END) * 100.0 / COUNT(eligible_users), 2) AS non_adopters_count
     FROM all_users
 )
-
--- You can SELECT * FROM adopter_percentage or continue pipeline
+'''
