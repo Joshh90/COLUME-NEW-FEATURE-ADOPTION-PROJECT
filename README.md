@@ -135,13 +135,14 @@ We compared users who adopted **at least one feature** within the first **7 days
 ---
 ## 🧠 10. BAIIR Framework
 
-| **Stage**         | **Action Taken**                                              |
-|-------------------|---------------------------------------------------------------|
+| **Stage**         | **Action Taken**                                               |
+|-------------------|----------------------------------------------------------------|
 | **Baseline**      | Defined eligible users and grouped by adoption                |
 | **Analysis**      | Retention, churn, session time, upgrade trends                |
 | **Insight**       | Adoption improves retention and engagement                    |
 | **Impact**        | Boosting adoption improves retention, revenue                 |
 | **Recommendation**| Build nudges, reinforce value, reduce drop-off                |
+
 
 
 ## SQL: Early Adoption Analysis Pipeline
