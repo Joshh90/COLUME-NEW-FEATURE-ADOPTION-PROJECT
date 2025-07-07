@@ -244,7 +244,7 @@ adopter_percentage AS (
 
 **Observation:**  
 Over 90% stayed on the same plan  
-Only 3.6% of adopters upgraded
+Only 3.9% of adopters upgraded
 
 **Impact**: Feature adoption didn’t convert to upsell
 
