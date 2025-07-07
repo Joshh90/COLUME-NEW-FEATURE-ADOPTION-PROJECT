@@ -261,10 +261,9 @@ Only 3.6% of adopters upgraded
 
 | File                     | Description                                 |
 |--------------------------|---------------------------------------------|
-| `Data_Cleaning.sql`      | SQL scripts for all cleaning steps          |
-| `Analysis.sql`           | Logic for adoption, segmentation, retention |
-| `User_Retention.pdf`     | Framing the business question               |
-| `Retention_Analysis.pbix`| Visuals & trends                            |
+| `Data Cleaning.sql`      | SQL scripts for all cleaning steps          |
+| `Data analysis.sql`      | Logic for adoption, segmentation, retention |
+
 
 ---
 
